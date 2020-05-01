@@ -1,0 +1,53 @@
+1、java中String的如何实现？
+jdk8及之前的版本，String内部使用char数组存储数据。
+jdk9之后，String类的实现改为byte数组存储字符串，同时用coder来标识使用哪种编码。
+
+2、解释下字符串常量池（String Pool）？
+保存所有字符串字面量，这些字面量在编译时期就确定。
+"abc"，使用双引号括起来的字符串，会自动放到String Pool中。
+通过调用String对象的intern()方法，可以将字符串放入String Pool中。
+jdk7之前，String Pool被放在运行时常量池中，属于永久代。
+在jdk7中，String Pool被移到堆中。因为永久代的空间有限，在大量使用字符串的场景下会导致 OutOfMemoryError 错误。
+
+3、final关键字
+数据：
+	对于基本数据类型，final使数值不变。
+	对于引用类型，final使引用不变，也就是引用对象的地址不能变，但是被引用对象本身是可以修改的。
+方法：
+	声明方法不能被子类重写。
+类：
+	声明类不能被继承。
+
+4、判断两个对象equal要怎么做？
+需要重写对象的equal()方法以及hashCode()方法，因为两个对象等价，他们的hashCode一定是相对的。
+
+5、clone方法，浅拷贝、深拷贝？
+clone()是Object的一个protected方法，因此需要实现Cloneable接口，再重写clone()方法。Cloneable 接口只是规定，如果一个类没有实现 Cloneable 接口又调用了 clone() 方法，就会抛出 CloneNotSupportedException。
+浅拷贝：拷贝对象和原始对象的引用类型引用同一个对象。即原对象中的是引用类型的变量，浅拷贝后还是同一个引用
+深拷贝：拷贝对象和原始对象的引用类型引用不同对象。需要对原对象中的引用类型变量再分别做深拷贝。可以新建对象辅值，或者如果引用对象实现了深拷贝的clone()方法，可以直接调用。
+一般情况下不要使用clone()方法，因为很可能会抛出类型转换异常，因为clone()方法需要类型转换。最好使用构造函数或者拷贝工厂来拷贝一个对象。
+
+6、泛型，限定通配符和非限定通配符？
+两种限定通配符：
+	<? extends T> 它通过确保类型必须是T的子类来设定类型的上界
+	<? super T>它通过确保类型必须是T的父类来设定类型的下界
+非限定通配符：
+	<?>可以用任意类型来替代
+
+7、注解的作用？常用注解？元注解？
+作用：
+	生产文档。如@param、@return等
+	跟踪代码依赖性，实现替代配置文件功能。如spring的注入@Autowrite、@Service、@Controller等
+	编译时进行格式检查。如@override 放在方法前，如果你这个方法并不是覆盖了超类方法，则编译时就能检查出。
+注解的原理：
+注解本质是一个继承了Annotation 的特殊接口，其具体实现类是Java 运行时生成的动态代理类。
+
+元注解：
+java.lang.annotation 提供了四种元注解，专门注解其他的注解（在自定义注解的时候，需要使用到元注解）：
+   @Documented – 注解是否将包含在JavaDoc中
+   @Retention – 什么时候使用该注解
+   @Target – 注解用于什么地方
+   @Inherited – 是否允许子类继承该注解
+
+参考资料：https://www.cnblogs.com/acm-bingzi/p/javaAnnotation.html
+
