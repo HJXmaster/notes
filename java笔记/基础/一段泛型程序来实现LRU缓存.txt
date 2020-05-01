@@ -1,0 +1,61 @@
+/**
+ * 
+ * @author 10978
+ *LinkedHashMap可以用来实现固定大小的LRU缓存，当LRU缓存已经满了的时候，它会把最老的键值对移出缓存。
+ *LinkedHashMap提供了一个称为removeEldestEntry()的方法，该方法会被put()和putAll()调用来删除最老的键值对。
+ * @param <K>
+ * @param <V>
+ */
+public class LRUCache<K,V> extends LinkedHashMap<K, V> {
+	private int cacheSize;
+
+	/**
+	 * 
+	 * @param cacheSize 缓存大小
+	 */
+	public LRUCache(int cacheSize) {
+		super(16, 0.75f, true);
+		this.cacheSize = cacheSize;
+	}
+
+	/**
+	 * 该方法会被put()和putAll()调用来删除最老的键值对。超过缓存大小cacheSize时，会删除最老的一个
+	 */
+	@Override
+	protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+		return size() >= cacheSize;
+	}
+	
+}
+
+
+package my.test;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
+public class Main {
+	public static void main(String[] args) throws InterruptedException{
+		LRUCache cache=new LRUCache(5);
+		for(int i=0;i<8;i++){
+			cache.put("key"+i, "value"+i);
+		}
+		System.out.println(cache.size());
+		Iterator<Entry> it=cache.entrySet().iterator();
+		while(it.hasNext()){
+			Entry entry=it.next();
+			System.out.println(entry.getKey()+" "+entry.getValue());
+		}
+	}
+}
+
+输出结果为：
+4
+key4 value4
+key5 value5
+key6 value6
+key7 value7
+
+可以看到1,2,3这三个最早进入缓存的数据以及被清除了。
