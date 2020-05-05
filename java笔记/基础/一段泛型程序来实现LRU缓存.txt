@@ -14,7 +14,7 @@ public class LRUCache<K,V> extends LinkedHashMap<K, V> {
 	 * @param cacheSize 缓存大小
 	 */
 	public LRUCache(int cacheSize) {
-		super(16, 0.75f, true);
+		super(16, 0.75f, true);//true表示accessOrder=true，使用LRU插入，若accessOrder=false，则为顺序插入
 		this.cacheSize = cacheSize;
 	}
 
